@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from datetime import datetime, timedelta
 import random
 import json
+import os
 
 app = FastAPI(title="Fake Commerce API", version="1.0.0")
 
@@ -41,10 +42,10 @@ def generate_fake_orders(num_orders: int = 100) -> list:
             "order_id": i + 1,
             "customer_id": random.randint(1, 50),
             "product_id": random.randint(1, 30),
-            "quantity": random.randint(-5, 20),  # ❌ BUG: quantités négatives
+            "quantity": random.randint(-5, 20),
             "price": round(random.uniform(10, 500), 2),
             "order_date": (datetime.now() - timedelta(days=random.randint(0, 90))).isoformat(),
-            "region": random.choice(REGIONS) if random.random() > 0.1 else None,  # ❌ BUG: nulls
+            "region": random.choice(REGIONS) if random.random() > 0.1 else None,
         })
     return orders
 
@@ -55,7 +56,7 @@ def generate_fake_customers(num_customers: int = 50) -> list:
         customers.append({
             "customer_id": i + 1,
             "name": f"Customer_{i+1}",
-            "email": f"customer{i+1}@example.com" if random.random() > 0.05 else None,  # ❌ BUG: emails nulls
+            "email": f"customer{i+1}@example.com" if random.random() > 0.05 else None,
             "country": random.choice(COUNTRIES),
         })
     return customers
@@ -101,4 +102,5 @@ def health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = int(os.getenv("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
