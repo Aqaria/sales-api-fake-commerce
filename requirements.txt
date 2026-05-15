@@ -1,0 +1,10 @@
+pandas==2.1.4
+numpy==1.26.3
+fastapi==0.109.0
+uvicorn==0.27.0
+requests==2.31.0
+pydantic==2.5.3
+dbt-core==1.7.8
+dbt-snowflake==1.7.1
+snowflake-connector-python==3.8.0
+python-dotenv==1.0.0
